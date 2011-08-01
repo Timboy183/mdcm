@@ -91,15 +91,15 @@ namespace Dicom.Codec {
 		}
 
 		public static void RegisterCodecs() {
-			Assembly main = Assembly.GetEntryAssembly();
-			AssemblyName[] referenced = main.GetReferencedAssemblies();
-
-			RegisterCodecs(main);
-
-			foreach (AssemblyName an in referenced) {
-				Assembly asm = Assembly.Load(an);
-				RegisterCodecs(asm);
-			}
+            if (_codecs == null)
+                _codecs = new Dictionary<DicomTransferSyntax, Type>();
+            DcmRleCodec rleCodec = new DcmRleCodec();
+            if (!_codecs.ContainsKey(rleCodec.GetTransferSyntax()))
+            {
+                _codecs.Add(rleCodec.GetTransferSyntax(), typeof(DcmRleCodec));
+                _codecNames.Add(rleCodec.GetName() + " [x86]");
+            }
+            return;
 		}
 
 		public static void RegisterExternalCodecs(string path, string pattern) {
@@ -108,10 +108,6 @@ namespace Dicom.Codec {
 			foreach (FileInfo file in files) {
 				Debug.Log.Info("Codec File: {0}", file.FullName);
 				try {
-					//AssemblyDetails details = AssemblyDetails.FromFile(file.FullName);
-					//if (details.CPUVersion == CPUVersion.x64 && IntPtr.Size != 8) continue;
-					//if (details.CPUVersion == CPUVersion.x86 && IntPtr.Size != 4) continue;
-
 					Assembly asm = Assembly.LoadFile(file.FullName);
 					RegisterCodecs(asm);
 				} catch (BadImageFormatException) {

@@ -667,8 +667,8 @@ namespace Dicom.Data {
 				return (elem as DcmStringElement).GetValue(index);
 			if (elem is DcmMultiStringElement)
 				return (elem as DcmMultiStringElement).GetValue(index);
-			if (elem != null)
-				throw new DicomDataException("Tried to access element with incorrect VR");
+			//if (elem != null)
+				//throw new DicomDataException("Tried to access element with incorrect VR");
 			return deflt;
 		}
 
