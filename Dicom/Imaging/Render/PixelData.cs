@@ -52,11 +52,29 @@ namespace Dicom.Imaging.Render {
 						return new GrayscalePixelDataU16(pixelData.ImageWidth, pixelData.ImageHeight, pixelData.GetFrameDataU16(frame));
 				} else
 					throw new DicomImagingException("Unsupported pixel data value for bits stored: {0}", pixelData.BitsStored);
-			} else if (pi == PhotometricInterpretation.Rgb || pi == PhotometricInterpretation.YbrFull) {
+			} else if (pi == PhotometricInterpretation.Rgb) {
 				return new ColorPixelData24(pixelData.ImageWidth, pixelData.ImageHeight, pixelData.GetFrameDataU8(frame));
-			} else {
-				throw new DicomImagingException("Unsupported pixel data photometric interpretation: {0}", pi.Value);
-			}
+            }
+            else if (pi == PhotometricInterpretation.YbrFull || pi == PhotometricInterpretation.YbrFull422)
+            {
+                //Converts YBR color space to Grayscale. Converting is much easier than writing a new YBR color pipeline.
+                var frameData = pixelData.GetFrameDataU8(frame);
+                int len = frameData.Length;
+                byte[] byteArray = new byte[len];
+                int pos = 0;
+                foreach (int item in frameData)
+                {
+                    byte[] data = BitConverter.GetBytes(item);
+                    Array.Copy(data, 0, byteArray, pos,1);
+                    pos += 1;
+                }
+
+                return new GrayscalePixelDataU8(pixelData.ImageWidth, pixelData.ImageHeight, byteArray);
+            }
+            else
+            {
+                throw new DicomImagingException("Unsupported pixel data photometric interpretation: {0}", pi.Value);
+            }
 		}
 	}
 

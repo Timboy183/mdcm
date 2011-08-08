@@ -97,6 +97,7 @@ namespace Dicom.Data {
 		public abstract DcmItem Clone();
 
 		public virtual void Dump(StringBuilder sb, String prefix,  DicomDumpOptions options) {
+            var tag = DicomTag.Parse(_tag.ToString());
 			sb.Append(prefix).AppendLine(_tag.Entry.ToString());
 		}
 		#endregion

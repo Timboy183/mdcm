@@ -47,11 +47,19 @@ namespace Dicom.Imaging.Process {
 				if (wl.Length > 0)
 					pipeline.WindowLevel = wl[0];
 				return pipeline;
-			} else if (pi == PhotometricInterpretation.Rgb) {
+			} 
+            else if (pi == PhotometricInterpretation.Rgb) 
+            {
 				return new RgbColorPipeline();
-			} else {
-				throw new DicomImagingException("Unsupported pipeline photometric interpretation: {0}", pi.Value);
-			}
+            }
+            else if (pi == PhotometricInterpretation.YbrFull || pi == PhotometricInterpretation.YbrFull422)
+            {
+                return new RgbColorPipeline();
+            }
+            else
+            {
+                throw new DicomImagingException("Unsupported pipeline photometric interpretation: {0}", pi.Value);
+            }
 		}
 	}
 }

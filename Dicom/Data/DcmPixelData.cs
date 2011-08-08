@@ -449,7 +449,7 @@ namespace Dicom.Data {
 				if (BitsAllocated != 8)
 					throw new DicomDataException("BitsAllocated=" + BitsAllocated + " is unsupported!");
 
-				if (PhotometricInterpretation != "RGB" && PhotometricInterpretation != "YBR_FULL")
+				if (PhotometricInterpretation != "RGB" && PhotometricInterpretation != "YBR_FULL" && PhotometricInterpretation != "YBR_FULL_422")
 					throw new DicomDataException("PhotometricInterpretation=" + PhotometricInterpretation + " is unsupported!");
 
 				int count = ImageWidth * ImageHeight;
