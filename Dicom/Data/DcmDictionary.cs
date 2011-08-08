@@ -166,22 +166,6 @@ namespace Dicom.Data {
 		public override string ToString() {
 			return String.Format("({0}) {1}{2}", DisplayTag, Name, Retired ? " (Retired)" : "");
 		}
-
-        private List<string> charsToRemoveFromKeys = new List<string>(){
-                                                         " ",
-                                                         "'",
-                                                         "."
-                                                     };
-
-        public KeyValuePair<string, string> ToKVP()
-        {
-            string name = "";
-            foreach (var c in charsToRemoveFromKeys)
-	        {
-                name = Name.Replace(c,"");
-	        }
-            return new KeyValuePair<string, string>(name, "");
-        }
 	}
 
 	/// <summary>

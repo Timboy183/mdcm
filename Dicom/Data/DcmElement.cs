@@ -188,6 +188,19 @@ namespace Dicom.Data {
 				}
 			}
 		}
+
+
+        public KeyValuePair<string, string> ToKVP()
+        {
+            List<string> charsToRemoveFromKeys = new List<string>(){" ", "'", "."};
+            string name = Name;
+            foreach (var c in charsToRemoveFromKeys)
+            {
+                name = name.Replace(c, "");
+            }
+            var val = GetValueString();
+            return new KeyValuePair<string, string>(name, val);
+        }
 		#endregion
 
 		#region Static Create Methods
