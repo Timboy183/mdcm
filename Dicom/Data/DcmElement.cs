@@ -192,12 +192,15 @@ namespace Dicom.Data {
 
         public KeyValuePair<string, string> ToKVP()
         {
-            List<string> charsToRemoveFromKeys = new List<string>(){" ", "'", "."};
+            List<string> charsToRemoveFromKeys = new List<string>() { " ", "'", "." };
             string name = Name;
             foreach (var c in charsToRemoveFromKeys)
             {
                 name = name.Replace(c, "");
             }
+            if (name.ToLower() == "pixeldata" || name.ToLower() == "privatetag")
+                return new KeyValuePair<string, string>(name, "");              //Don't try to parse images to strings (OUT OF MEMORY!)
+
             var val = GetValueString();
             return new KeyValuePair<string, string>(name, val);
         }
