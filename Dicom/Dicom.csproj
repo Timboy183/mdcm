@@ -110,6 +110,7 @@
     <Compile Include="Imaging\WindowLevel.cs" />
     <Compile Include="IO\SegmentStream.cs" />
     <Compile Include="Network\Client\CStoreClient.cs" />
+    <Compile Include="Network\Client\CStoreRequestedArgs.cs" />
     <Compile Include="Network\DcmCommand.cs" />
     <Compile Include="Data\DicomDataException.cs" />
     <Compile Include="Data\DcmDataset.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Network\HookStream.cs" />
     <Compile Include="Network\NetworkErrorStream.cs" />
     <Compile Include="Network\OpenSSL.cs" />
+    <Compile Include="Network\Server\DicomClientCreatedArgs.cs" />
     <Compile Include="Network\ThrottleStream.cs" />
     <Compile Include="HL7\MLLP.cs" />
     <Compile Include="IO\FileSegment.cs" />

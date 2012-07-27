@@ -31,6 +31,15 @@ namespace Dicom.Network.Server {
 		public delegate void DicomClientCreatedDelegate(DcmServer<T> server, T client, DcmSocketType socketType);
 		public delegate void DicomClientClosedDelegate(DcmServer<T> server, T client);
 
+
+        public event EventHandler<DicomClientCreatedArgs<T>> DicomClientCreated;
+
+        internal void RaiseDicomClientCreated(T sender, DicomClientCreatedArgs<T> args)
+        {
+            if (DicomClientCreated != null)
+                DicomClientCreated(sender, args);
+        }
+
 		#region Private Members
 		private List<int> _ports = new List<int>();
 		private List<DcmSocketType> _types = new List<DcmSocketType>();
@@ -115,6 +124,8 @@ namespace Dicom.Network.Server {
 
 							if (OnDicomClientCreated != null)
 								OnDicomClientCreated(this, handler, client.Type);
+
+                            RaiseDicomClientCreated(handler, new DicomClientCreatedArgs<T>() { DcmService = handler, DcmSocketType = client.Type });
 
 							handler.InitializeService(client);
 							clients.Add(handler);

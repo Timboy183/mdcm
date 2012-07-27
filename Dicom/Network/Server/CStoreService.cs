@@ -25,6 +25,7 @@ using System.IO;
 using System.Text;
 
 using Dicom.Data;
+using Dicom.Network.Client;
 
 namespace Dicom.Network.Server {
 	public delegate DcmStatus DcmCStoreEchoCallback(CStoreService client, byte presentationID, ushort messageID, DcmPriority priority);
@@ -44,6 +45,14 @@ namespace Dicom.Network.Server {
 			UseFileBuffer = true;
 			LogID = "C-Store SCP";
 		}
+
+        public event EventHandler<CStoreRequestedArgs> CStoreRequested;
+
+        private void RaiseCStoreRequested(object sender, CStoreRequestedArgs args)
+        {
+            if (CStoreRequested != null)
+                CStoreRequested(sender, args);
+        }
 
 		protected override void OnReceiveAssociateRequest(DcmAssociate association) {
 			association.NegotiateAsyncOps = false;
@@ -90,6 +99,8 @@ namespace Dicom.Network.Server {
 
 			if (OnCStoreRequest != null)
 				status = OnCStoreRequest(this, presentationID, messageID, affectedInstance, priority, moveAE, moveMessageID, dataset, fileName);
+
+            RaiseCStoreRequested(this, new CStoreRequestedArgs() { Dataset = dataset, FileName = fileName, MessageID = messageID, MoveAE = moveAE, MoveMessageID = moveMessageID, PresentationID = presentationID, Priority = priority });
 
 			SendCStoreResponse(presentationID, messageID, affectedInstance, status);
 		}
